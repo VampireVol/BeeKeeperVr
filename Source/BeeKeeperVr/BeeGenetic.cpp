@@ -1,0 +1,109 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "BeeGenetic.h"
+
+// Sets default values for this component's properties
+UBeeGenetic::UBeeGenetic()
+{
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = false;
+
+	// ...
+}
+
+
+// Called when the game starts
+void UBeeGenetic::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// ...
+	
+}
+
+void UBeeGenetic::Init(TEnumAsByte<Species> main, TEnumAsByte<Species> sec, int32 speed, int32 fertility)
+{
+	Main = main;
+	Sec = sec;
+	Speed = speed;
+	Fertility = fertility;
+}
+
+// Called every frame
+void UBeeGenetic::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	// ...
+}
+
+int32 UBeeGenetic::GetSpeedValue()
+{
+	int32 count = 0;
+	int32 mask = 1;
+	for (int i = 0; i < 8; ++i)
+	{
+		if (mask & Speed)
+			++count;
+		mask <<= 1;
+	}
+	return count;
+}
+
+int32 UBeeGenetic::GetFertiliryValue()
+{
+	int32 count = 0;
+	int32 maskMain = 1;
+	int32 maskSec = 2;
+	for (int i = 0; i < 5; ++i)
+	{
+		if (maskMain & Fertility || maskSec & Fertility)
+			++count;
+		maskMain <<= 2;
+		maskSec <<= 2;
+	}
+	return count;
+}
+
+UBeeGenetic *UBeeGenetic::Construct(TEnumAsByte<Species> main, TEnumAsByte<Species> sec, int32 speed, int32 fertility)
+{
+	UBeeGenetic *bee = NewObject<UBeeGenetic>();
+	bee->Init(main, sec, speed, fertility);
+	return bee;
+}
+
+//TODO: move this to helper functions
+const int32 SPEED_GENS_COUNT = 8;
+const int32 FERTILITRY_GENS_COUNT = 10;
+static bool get_bit(int32 num, int32 pos)
+{
+	return (num >> pos) & 1U;
+}
+
+static FString get_gens_str(int32 gen, int32 gens_count)
+{
+	FString out;
+	for (int i = 0; i < gens_count; ++i)
+	{
+		out += get_bit(gen, i) ? "1" : "0";
+	}
+	return out;
+}
+
+FString UBeeGenetic::GetInfoBee()
+{
+	FString out;
+	FString mainName = UEnum::GetValueAsString(Main);
+	FString secName = UEnum::GetValueAsString(Sec);
+	if (mainName.Equals(secName))
+		out = mainName;
+	else 
+		out = mainName + "-" + secName; 
+	out += FString::Printf(TEXT(": Speed %d %s; Fertility %d %s"), GetSpeedValue(), *get_gens_str(Speed, SPEED_GENS_COUNT),
+		GetFertiliryValue(), *get_gens_str(Fertility, FERTILITRY_GENS_COUNT));
+	
+	return out;
+}
+
