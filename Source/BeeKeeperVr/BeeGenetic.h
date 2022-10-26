@@ -66,4 +66,11 @@ public:
 	static UBeeGenetic* Construct(TEnumAsByte<Species> main, TEnumAsByte<Species> sec, int32 speed, int32 fertility);
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	FString GetInfoBee();
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	FString GetInfoSpecies();
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	FString GetInfoSpeed();
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	FString GetInfoFertility();
 };

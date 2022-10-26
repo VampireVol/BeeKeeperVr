@@ -88,22 +88,38 @@ static FString get_gens_str(int32 gen, int32 gens_count)
 	for (int i = 0; i < gens_count; ++i)
 	{
 		out += get_bit(gen, i) ? "1" : "0";
+		if (i % 2 == 1)
+			out += " ";
 	}
 	return out;
 }
 
 FString UBeeGenetic::GetInfoBee()
 {
+	FString out = GetInfoSpecies();
+	out += ": " + GetInfoSpeed() + "; " + GetInfoFertility();
+	return out;
+}
+
+FString UBeeGenetic::GetInfoSpecies()
+{
 	FString out;
 	FString mainName = UEnum::GetValueAsString(Main);
 	FString secName = UEnum::GetValueAsString(Sec);
 	if (mainName.Equals(secName))
 		out = mainName;
-	else 
-		out = mainName + "-" + secName; 
-	out += FString::Printf(TEXT(": Speed %d %s; Fertility %d %s"), GetSpeedValue(), *get_gens_str(Speed, SPEED_GENS_COUNT),
-		GetFertiliryValue(), *get_gens_str(Fertility, FERTILITRY_GENS_COUNT));
-	
+	else
+		out = mainName + "-" + secName;
 	return out;
+}
+
+FString UBeeGenetic::GetInfoSpeed()
+{
+	return FString::Printf(TEXT("Speed %d %s"), GetSpeedValue(), *get_gens_str(Speed, SPEED_GENS_COUNT));
+}
+
+FString UBeeGenetic::GetInfoFertility()
+{
+	return FString::Printf(TEXT("Fertility %d %s"), GetFertiliryValue(), *get_gens_str(Fertility, FERTILITRY_GENS_COUNT));
 }
 
