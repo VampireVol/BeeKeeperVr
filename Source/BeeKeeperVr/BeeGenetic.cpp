@@ -3,6 +3,8 @@
 
 #include "BeeGenetic.h"
 
+const float COMB_AMOUNT_PER_MINUTE = 0.5f;
+
 // Sets default values for this component's properties
 UBeeGenetic::UBeeGenetic()
 {
@@ -110,6 +112,7 @@ FString UBeeGenetic::GetInfoSpecies()
 		out = mainName;
 	else
 		out = mainName + "-" + secName;
+	out += " bee";
 	return out;
 }
 
@@ -122,4 +125,29 @@ FString UBeeGenetic::GetInfoFertility()
 {
 	return FString::Printf(TEXT("Fertility %d %s"), GetFertiliryValue(), *get_gens_str(Fertility, FERTILITRY_GENS_COUNT));
 }
+
+
+bool UBeeGenetic::GetGenSpeedValue(int32 index)
+{
+	return get_bit(Speed, index) == 1;
+}
+
+bool UBeeGenetic::GetGenFertilityValue(int32 index)
+{
+	return get_bit(Fertility, index) == 1;
+}
+
+int32 UBeeGenetic::GetProductivitySpeed()
+{
+	int32 out = 0;
+	float speedCoeff = *SpeedCoeff.Find(GetSpeedValue());
+	out += *CombCostByTier.Find(*Tiers.FindKey(Main)) * speedCoeff;
+	if (Main != Sec)
+	{
+		out += *CombCostByTier.Find(*Tiers.FindKey(Sec)) * speedCoeff;
+		out *= 0.5f;
+	}
+	return out * COMB_AMOUNT_PER_MINUTE;
+}
+
 

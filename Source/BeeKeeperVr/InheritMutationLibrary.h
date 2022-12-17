@@ -16,5 +16,7 @@ class BEEKEEPERVR_API UInheritMutationLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static UBeeGenetic *Inherit(const UBeeGenetic *p1, const UBeeGenetic *p2);
-	
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static UBeeGenetic *CopyBeeProps(const UBeeGenetic *from);
 };

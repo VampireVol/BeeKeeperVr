@@ -19,27 +19,6 @@ const float MUTATION_TIER_UP_TWO_CHANCE = 1.0f;
 const int32 SPEED_GENS_COUNT = 8;
 const int32 FERTILITRY_GENS_COUNT = 10;
 
-static TMultiMap<int32, TEnumAsByte<Species>> Tiers {
-  {1, Species::Meadow},
-  {1, Species::Forest},
-  {1, Species::River},
-  {2, Species::Plant},
-  {2, Species::Mushroom},
-  {2, Species::Berry},
-  {2, Species::Woody},
-  {3, Species::Potato},
-  {3, Species::Wheat},
-  {3, Species::Grape},
-  {3, Species::Tomato},
-  {4, Species::Flour},
-  {4, Species::Plank},
-  {4, Species::Paper},
-  {5, Species::Bread},
-  {5, Species::Wine},
-  {5, Species::Boxed},
-  {5, Species::Ketchup},
-};
-
 static bool random(float less)
 {
   return FMath::FRandRange(0.f, 1.f) < less;
@@ -87,11 +66,22 @@ static void mutate(TEnumAsByte<Species> &s, float mutation_chance)
     else
       tier += 2;
 
-    if (tier < 0)
-      tier = 0;
+    if (tier < 1)
+      tier = 1;
+
+    if (tier > 5)
+      tier = 5;
     TArray<TEnumAsByte<Species>> species;
     Tiers.MultiFind(tier, species);
-    s = species[FMath::RandRange(0 , species.Num() - 1)];
+    if (species.Num())
+    {
+      s = species[FMath::RandRange(0, species.Num() - 1)];
+    }
+    else
+    {
+      UE_LOG(LogTemp, Warning, TEXT("Can't found species for tier %d"), tier);
+    }
+    
   }
 }
 
@@ -153,7 +143,14 @@ UBeeGenetic *UInheritMutationLibrary::Inherit(const UBeeGenetic *p1, const UBeeG
   TEnumAsByte<Species> speciesP1 = random(0.5f) ? p1->Main : p1->Sec;
   TEnumAsByte<Species> speciesP2 = random(0.5f) ? p2->Main : p2->Sec;
   mutate(speciesP1, speciesP2);
+  UE_LOG(LogTemp, Log, TEXT("Start inherit speed gen"));
   int32 speed = inherit(p1->Speed, p2->Speed, SPEED_GENS_COUNT);
+  UE_LOG(LogTemp, Log, TEXT("Start inherit fertility gen"));
   int32 fertility = inherit(p1->Fertility, p2->Fertility, FERTILITRY_GENS_COUNT);
   return UBeeGenetic::Construct(speciesP1, speciesP2, speed, fertility);
+}
+
+UBeeGenetic *UInheritMutationLibrary::CopyBeeProps(const UBeeGenetic *from)
+{
+  return UBeeGenetic::Construct(from->Main, from->Sec, from->Speed, from->Fertility);
 }
