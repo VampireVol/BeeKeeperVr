@@ -122,4 +122,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	int32 GetProductivitySpeed();
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static UBeeGenetic* CreateMeadowBee();
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static UBeeGenetic* CreateForestBee();
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static UBeeGenetic* CreateRiverBee();
 };

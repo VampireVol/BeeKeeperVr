@@ -150,4 +150,18 @@ int32 UBeeGenetic::GetProductivitySpeed()
 	return out * COMB_AMOUNT_PER_MINUTE;
 }
 
+UBeeGenetic *UBeeGenetic::CreateMeadowBee()
+{
+	return Construct(Species::Meadow, Species::Meadow, 15, 15);
+}
+
+UBeeGenetic *UBeeGenetic::CreateForestBee()
+{
+	return Construct(Species::Forest, Species::Forest, 51, 51);
+}
+
+UBeeGenetic *UBeeGenetic::CreateRiverBee()
+{
+	return Construct(Species::River, Species::River, 60, 60);
+}
 
