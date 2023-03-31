@@ -152,5 +152,8 @@ UBeeGenetic *UInheritMutationLibrary::Inherit(const UBeeGenetic *p1, const UBeeG
 
 UBeeGenetic *UInheritMutationLibrary::CopyBeeProps(const UBeeGenetic *from)
 {
-  return UBeeGenetic::Construct(from->Main, from->Sec, from->Speed, from->Fertility);
+  if (from)
+    return UBeeGenetic::Construct(from->Main, from->Sec, from->Speed, from->Fertility);
+  else
+    return UBeeGenetic::Construct(Meadow, Meadow, 0, 0);
 }
