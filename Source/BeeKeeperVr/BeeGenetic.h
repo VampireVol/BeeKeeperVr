@@ -70,6 +70,27 @@ static TMap<int32, float> SpeedCoeff{
 	{8, 4.0f},
 };
 
+static TMap<TEnumAsByte<Species>, bool> DiscoveredSpecies{
+	{Species::Meadow, false},
+	{Species::Forest, false},
+	{Species::River, false},
+	{Species::Plant, false},
+	{Species::Mushroom, false},
+	{Species::Berry, false},
+	{Species::Woody, false},
+	{Species::Potato, false},
+	{Species::Wheat, false},
+	{Species::Grape, false},
+	{Species::Tomato, false},
+	{Species::Flour, false},
+	{Species::Plank, false},
+	{Species::Paper, false},
+	{Species::Bread, false},
+	{Species::Wine, false},
+	{Species::Boxed, false},
+	{Species::Ketchup, false},
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BEEKEEPERVR_API UBeeGenetic : public USceneComponent
 {
@@ -131,4 +152,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static UBeeGenetic* CreateRiverBee();
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static bool IsDiscoveredSpecies(TEnumAsByte<Species> species);
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static FString GetSpeciesString(TEnumAsByte<Species> species);
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static void DiscoverSpecies(UBeeGenetic *bee);
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static int32 DiscoveredCount();
 };

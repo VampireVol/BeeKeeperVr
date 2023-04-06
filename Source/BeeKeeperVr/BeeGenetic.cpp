@@ -165,3 +165,34 @@ UBeeGenetic *UBeeGenetic::CreateRiverBee()
 	return Construct(Species::River, Species::River, 60, 60);
 }
 
+bool UBeeGenetic::IsDiscoveredSpecies(TEnumAsByte<Species> species)
+{
+	return DiscoveredSpecies[species];
+}
+
+FString UBeeGenetic::GetSpeciesString(TEnumAsByte<Species> species)
+{
+	return UEnum::GetValueAsString(species);
+}
+
+void UBeeGenetic::DiscoverSpecies(UBeeGenetic *bee)
+{
+	if (bee)
+	{
+		DiscoveredSpecies[bee->Main] = true;
+		DiscoveredSpecies[bee->Sec] = true;
+	}
+}
+
+int32 UBeeGenetic::DiscoveredCount()
+{
+	int32 count = 0;
+	for (const auto [key, value] : DiscoveredSpecies)
+	{
+		if (value)
+		{
+			++count;
+		}
+	}
+	return count;
+}
