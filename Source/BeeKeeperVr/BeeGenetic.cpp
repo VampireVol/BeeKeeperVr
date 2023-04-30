@@ -69,6 +69,21 @@ int32 UBeeGenetic::GetFertiliryValue()
 	return count;
 }
 
+int32 UBeeGenetic::GetRadiusValue()
+{
+	int32 count = 0;
+	int32 maskMain = 1;
+	int32 maskSec = 2;
+	for (int i = 0; i < 3; ++i)
+	{
+		if (maskMain & Radius || maskSec & Radius)
+			++count;
+		maskMain <<= 2;
+		maskSec <<= 2;
+	}
+	return count;
+}
+
 UBeeGenetic *UBeeGenetic::Construct(TEnumAsByte<Species> main, TEnumAsByte<Species> sec, int32 speed, int32 fertility)
 {
 	UBeeGenetic *bee = NewObject<UBeeGenetic>();
@@ -172,7 +187,7 @@ bool UBeeGenetic::IsDiscoveredSpecies(TEnumAsByte<Species> species)
 
 FString UBeeGenetic::GetSpeciesString(TEnumAsByte<Species> species)
 {
-	return UEnum::GetValueAsString(species);
+	return StaticEnum<Species>()->GetValueAsString(species);
 }
 
 void UBeeGenetic::DiscoverSpecies(UBeeGenetic *bee)
@@ -195,4 +210,9 @@ int32 UBeeGenetic::DiscoveredCount()
 		}
 	}
 	return count;
+}
+
+FBeeColors UBeeGenetic::getBeeColors(TEnumAsByte<Species> species)
+{
+	return SpeciesColors[species];
 }

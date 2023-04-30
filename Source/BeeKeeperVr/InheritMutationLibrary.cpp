@@ -143,9 +143,9 @@ UBeeGenetic *UInheritMutationLibrary::Inherit(const UBeeGenetic *p1, const UBeeG
   TEnumAsByte<Species> speciesP1 = random(0.5f) ? p1->Main : p1->Sec;
   TEnumAsByte<Species> speciesP2 = random(0.5f) ? p2->Main : p2->Sec;
   mutate(speciesP1, speciesP2);
-  UE_LOG(LogTemp, Log, TEXT("Start inherit speed gen"));
+  //UE_LOG(LogTemp, Log, TEXT("Start inherit speed gen"));
   int32 speed = inherit(p1->Speed, p2->Speed, SPEED_GENS_COUNT);
-  UE_LOG(LogTemp, Log, TEXT("Start inherit fertility gen"));
+  //UE_LOG(LogTemp, Log, TEXT("Start inherit fertility gen"));
   int32 fertility = inherit(p1->Fertility, p2->Fertility, FERTILITRY_GENS_COUNT);
   return UBeeGenetic::Construct(speciesP1, speciesP2, speed, fertility);
 }
@@ -155,5 +155,5 @@ UBeeGenetic *UInheritMutationLibrary::CopyBeeProps(const UBeeGenetic *from)
   if (from)
     return UBeeGenetic::Construct(from->Main, from->Sec, from->Speed, from->Fertility);
   else
-    return UBeeGenetic::Construct(Meadow, Meadow, 0, 0);
+    return UBeeGenetic::Construct(Species::Meadow, Species::Meadow, 0, 0);
 }

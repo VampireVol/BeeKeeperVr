@@ -29,6 +29,28 @@ enum Species
 	Ketchup UMETA(DisplayName = "Ketchup")
 };
 
+UENUM(BlueprintType)
+enum class EyeColor : uint8
+{
+	Black UMETA(DisplayName = "Black"),
+	Red UMETA(DisplayName = "Red"),
+	Green UMETA(DisplayName = "Green"),
+	Blue UMETA(DisplayName = "Blue"),
+	Size UMETA(DisplayName = "Size")
+};
+
+UENUM(BlueprintType)
+enum class EffectType : uint8
+{
+	None UMETA(DisplayName = "Black"),
+	Speed UMETA(DisplayName = "Black"),
+	Mutation UMETA(DisplayName = "Black"),
+	Stability UMETA(DisplayName = "Black"),
+	Fertility UMETA(DisplayName = "Black"),
+	Infertility UMETA(DisplayName = "Black"),
+	Size UMETA(DisplayName = "Size")
+};
+
 static TMultiMap<int32, TEnumAsByte<Species>> Tiers{
 	{1, Species::Meadow},
 	{1, Species::Forest},
@@ -91,6 +113,48 @@ static TMap<TEnumAsByte<Species>, bool> DiscoveredSpecies{
 	{Species::Ketchup, false},
 };
 
+USTRUCT(BlueprintType)
+struct FBeeColors
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeColor")
+	FColor Main;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeColor")
+	FColor MainDark;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeColor")
+	FColor Sec;
+
+	FBeeColors() {}
+	FBeeColors(FString MainStr, FString MainDarkStr, FString SecStr)
+	{
+		Main = FColor::FromHex(MainStr);
+		MainDark = FColor::FromHex(MainDarkStr);
+		Sec = FColor::FromHex(SecStr);
+	}
+};
+
+static TMap<TEnumAsByte<Species>, FBeeColors> SpeciesColors{
+	{Species::Meadow, FBeeColors("CD3B0000", "46180000", "08080800")},
+	{Species::Forest, FBeeColors("CD3B0000", "46180000", "04557500")},
+	{Species::River, FBeeColors("001DE700", "000E69FF", "08080800")},
+	{Species::Plant, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Mushroom, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Berry, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Woody, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Potato, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Wheat, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Grape, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Tomato, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Flour, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Plank, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Paper, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Bread, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Wine, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Boxed, FBeeColors("CD3B0000", "46180000", "08080800") },
+	{Species::Ketchup, FBeeColors("CD3B0000", "46180000", "08080800") },
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BEEKEEPERVR_API UBeeGenetic : public USceneComponent
 {
@@ -101,16 +165,32 @@ public:
 	UBeeGenetic();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
-	TEnumAsByte<Species> Main = Meadow;
+	TEnumAsByte<Species> Main = Species::Meadow;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
-	TEnumAsByte<Species> Sec = Meadow;
+	TEnumAsByte<Species> Sec = Species::Meadow;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
 	int32 Speed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
 	int32 Fertility;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
+	EyeColor EyeMain = EyeColor::Black;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
+	EyeColor EyeSec = EyeColor::Black;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
+	EffectType EffectMain = EffectType::None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
+	EffectType EffectSec = EffectType::None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeModel")
+	int32 Radius;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -125,6 +205,8 @@ public:
 	int32 GetSpeedValue();
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	int32 GetFertiliryValue();
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	int32 GetRadiusValue();
 	static UBeeGenetic* Construct(TEnumAsByte<Species> main, TEnumAsByte<Species> sec, int32 speed, int32 fertility);
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	FString GetInfoBee();
@@ -164,4 +246,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static int32 DiscoveredCount();
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static FBeeColors getBeeColors(TEnumAsByte<Species> species);
 };
