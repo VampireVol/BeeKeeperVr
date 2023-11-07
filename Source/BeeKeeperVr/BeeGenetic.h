@@ -119,11 +119,11 @@ struct FBeeColors
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeColor")
-	FColor Main;
+	FColor Main { FColor::FromHex("CD3B0000") };
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeColor")
-	FColor MainDark;
+	FColor MainDark { FColor::FromHex("46180000") };
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BeeColor")
-	FColor Sec;
+	FColor Sec { FColor::FromHex("08080800") };
 
 	FBeeColors() {}
 	FBeeColors(FString MainStr, FString MainDarkStr, FString SecStr)
