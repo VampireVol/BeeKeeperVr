@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+#include "Engine/DataTable.h"
 #include "BeeGenetic.generated.h"
 
 UENUM(BlueprintType)
@@ -27,6 +28,14 @@ enum Species
 	Wine UMETA(DisplayName = "Wine"),
 	Boxed UMETA(DisplayName = "Boxed"),
 	Ketchup UMETA(DisplayName = "Ketchup")
+};
+
+USTRUCT()
+struct FIcon : public FTableRowBase
+{
+	GENERATED_BODY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Icon;
 };
 
 UENUM(BlueprintType)
