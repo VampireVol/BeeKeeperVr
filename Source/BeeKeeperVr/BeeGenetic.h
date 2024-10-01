@@ -36,6 +36,12 @@ struct FIcon : public FTableRowBase
 	GENERATED_BODY()
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* Icon;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FColor Main;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FColor MainDark;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FColor Sec;
 };
 
 UENUM(BlueprintType)
