@@ -6,9 +6,8 @@
 #include "Engine/DataTable.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/Texture2D.h"
+#include "../BeeGenetic.h"
 #include "BeeFunctionLibrary.generated.h"
-
-enum Species;
 
 /**
  * 
