@@ -36,6 +36,10 @@
 				"Mac",
 				"Linux"
 			]
+		},
+		{
+			"Name": "UdpMessaging",
+			"Enabled": false
 		}
 	],
 	"TargetPlatforms": [
