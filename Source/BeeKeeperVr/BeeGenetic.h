@@ -222,7 +222,8 @@ public:
 	int32 GetFertiliryValue();
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	int32 GetRadiusValue();
-	static UBeeGenetic* Construct(TEnumAsByte<Species> main, TEnumAsByte<Species> sec, int32 speed, int32 fertility);
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static UBeeGenetic* Construct(TEnumAsByte<Species> _main, TEnumAsByte<Species> _sec, int32 _speed, int32 _fertility);
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	FString GetInfoBee();
 
