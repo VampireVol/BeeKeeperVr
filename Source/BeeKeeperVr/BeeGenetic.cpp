@@ -199,6 +199,11 @@ void UBeeGenetic::DiscoverSpecies(UBeeGenetic *bee)
 	}
 }
 
+void UBeeGenetic::DiscoverSpeciesType(TEnumAsByte<Species> species)
+{
+	DiscoveredSpecies[species] = true;
+}
+
 int32 UBeeGenetic::DiscoveredCount()
 {
 	int32 count = 0;
@@ -210,6 +215,14 @@ int32 UBeeGenetic::DiscoveredCount()
 		}
 	}
 	return count;
+}
+
+void UBeeGenetic::ClearDiscoveredSpecies()
+{
+	for (auto &[key, value] : DiscoveredSpecies)
+	{
+		value = false;
+	}
 }
 
 FBeeColors UBeeGenetic::getBeeColors(TEnumAsByte<Species> species)

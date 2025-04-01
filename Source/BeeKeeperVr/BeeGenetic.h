@@ -251,17 +251,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static UBeeGenetic* CreateRiverBee();
 
-	UFUNCTION(BlueprintCallable, Category = "Bees")
+	UFUNCTION(BlueprintCallable, Category = "Bees Discover")
 	static bool IsDiscoveredSpecies(TEnumAsByte<Species> species);
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static FString GetSpeciesString(TEnumAsByte<Species> species);
 
-	UFUNCTION(BlueprintCallable, Category = "Bees")
+	UFUNCTION(BlueprintCallable, Category = "Bees Discover")
 	static void DiscoverSpecies(UBeeGenetic *bee);
 
-	UFUNCTION(BlueprintCallable, Category = "Bees")
+	UFUNCTION(BlueprintCallable, Category = "Bees Discover")
+	static void DiscoverSpeciesType(TEnumAsByte<Species> species);
+
+	UFUNCTION(BlueprintCallable, Category = "Bees Discover")
 	static int32 DiscoveredCount();
+
+	UFUNCTION(BlueprintCallable, Category = "Bees Discover")
+	static void ClearDiscoveredSpecies();
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static FBeeColors getBeeColors(TEnumAsByte<Species> species);
