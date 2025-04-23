@@ -227,5 +227,13 @@ void UBeeGenetic::ClearDiscoveredSpecies()
 
 FBeeColors UBeeGenetic::getBeeColors(TEnumAsByte<Species> species)
 {
-	return SpeciesColors[species];
+  return SpeciesColors[species];
+}
+
+void UBeeGenetic::sortBees(UPARAM(ref) TArray<UBeeGenetic *> &bees)
+{
+	bees.Sort([](const UBeeGenetic &left, const UBeeGenetic &right) {
+		return left.Main > right.Main ||
+			(left.Main == right.Main && left.Sec > right.Sec);
+		});
 }

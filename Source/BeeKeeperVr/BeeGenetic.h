@@ -271,4 +271,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static FBeeColors getBeeColors(TEnumAsByte<Species> species);
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static void sortBees(UPARAM(ref) TArray<UBeeGenetic *> &bees);
 };
