@@ -15,3 +15,8 @@ UTexture2D* UBeeFunctionLibrary::GetIcon(UDataTable* IconsTable, Species Species
 	
 	return nullptr;
 }
+
+void UBeeFunctionLibrary::SortHoneycombs(UPARAM(ref) TMap<TEnumAsByte<Species>, int> &Honeycombs)
+{
+  Honeycombs.ValueSort([](const int32 Right, const int32 Left) {return Right > Left; });
+}
