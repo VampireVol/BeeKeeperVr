@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/Texture2D.h"
 #include "../BeeGenetic.h"
+#include "../ECombType.h"
 #include "BeeFunctionLibrary.generated.h"
 
 /**
@@ -20,5 +21,5 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Bees")
 	static UTexture2D* GetIcon(UDataTable* IconsTable, Species Species);
   UFUNCTION(BlueprintCallable, Category = "Util")
-  static void SortHoneycombs(UPARAM(ref) TMap<TEnumAsByte<Species>, int> &Honeycombs);
+  static void SortHoneycombs(UPARAM(ref) TMap<ECombType, int> &Honeycombs);
 };
