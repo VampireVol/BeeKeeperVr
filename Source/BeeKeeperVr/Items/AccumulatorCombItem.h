@@ -10,6 +10,7 @@ USTRUCT(BlueprintType)
 struct BEEKEEPERVR_API FAccumulatorCombItem
 {
 	GENERATED_BODY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemType ItemType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Amount;
