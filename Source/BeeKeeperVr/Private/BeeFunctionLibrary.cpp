@@ -59,6 +59,9 @@ static void ProduceItemsFromLeftovers(const EItemType ItemType, int& Amount, con
 	int NewItemCount = Amount / Cost;
 	if (NewItemCount > RemainingCount)
 		NewItemCount = RemainingCount;
+
+    if (NewItemCount == 0)
+        return;
 	int* Count = OutputItems.Find(ItemType);
 	if (!Count)
 		Count = &OutputItems.Add(ItemType);
