@@ -27,4 +27,6 @@ struct BEEKEEPERVR_API FBuildingRecipeData : public FTableRowBase
   UTexture2D *Icon;
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   TArray<FItemData> Cost;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite)
+  TSubclassOf<class AActor> BuildingClass;
 };
