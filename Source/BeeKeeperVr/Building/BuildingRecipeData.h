@@ -15,6 +15,7 @@ enum class EBuildingType : uint8
   Centrifuge UMETA(DisplayName = "Centrifuge"),
   BeeHotel UMETA(DisplayName = "Bee Hotel"),
   BeeAltar UMETA(DisplayName = "Bee Altar"),
+  ExtractorDNA UMETA(DisplayName = "Extractor DNA"),
 };
 
 USTRUCT(BlueprintType)
