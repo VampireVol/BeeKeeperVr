@@ -157,3 +157,14 @@ UBeeGenetic *UInheritMutationLibrary::CopyBeeProps(const UBeeGenetic *from)
   else
     return UBeeGenetic::Construct(Species::Meadow, Species::Meadow, 0, 0);
 }
+
+const int GEN_COST = 10;
+const float SPEED_MULTIPLIER_COST = 1.5;
+
+int32 UInheritMutationLibrary::GetDNAPoints(const UBeeGenetic *bee)
+{
+  int32 tierMultiplier = (find_tier(bee->Main) + find_tier(bee->Sec)) / 2;
+  int32 speedPoints = (bee->GetSpeedValue() * GEN_COST * tierMultiplier) * SPEED_MULTIPLIER_COST;
+  int32 fertilityPoints = bee->GetFertiliryValue() * GEN_COST * tierMultiplier * 2;
+  return speedPoints + fertilityPoints;
+}

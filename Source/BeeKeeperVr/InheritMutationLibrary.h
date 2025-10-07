@@ -19,4 +19,7 @@ class BEEKEEPERVR_API UInheritMutationLibrary : public UBlueprintFunctionLibrary
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static UBeeGenetic *CopyBeeProps(const UBeeGenetic *from);
+
+	UFUNCTION(BlueprintCallable, Category = "Bees")
+	static int32 GetDNAPoints(const UBeeGenetic *bee);
 };
