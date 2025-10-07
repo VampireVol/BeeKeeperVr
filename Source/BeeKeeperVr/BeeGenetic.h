@@ -217,11 +217,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Bees")
-	int32 GetSpeedValue();
+	int32 GetSpeedValue() const;
 	UFUNCTION(BlueprintCallable, Category = "Bees")
-	int32 GetFertiliryValue();
+	int32 GetFertiliryValue() const;
 	UFUNCTION(BlueprintCallable, Category = "Bees")
-	int32 GetRadiusValue();
+	int32 GetRadiusValue() const;
 	UFUNCTION(BlueprintCallable, Category = "Bees")
 	static UBeeGenetic* Construct(TEnumAsByte<Species> _main, TEnumAsByte<Species> _sec, int32 _speed, int32 _fertility);
 	UFUNCTION(BlueprintCallable, Category = "Bees")

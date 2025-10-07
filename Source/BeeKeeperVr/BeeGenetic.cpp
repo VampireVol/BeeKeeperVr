@@ -41,7 +41,7 @@ void UBeeGenetic::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	// ...
 }
 
-int32 UBeeGenetic::GetSpeedValue()
+int32 UBeeGenetic::GetSpeedValue() const
 {
 	int32 count = 0;
 	int32 mask = 1;
@@ -54,7 +54,7 @@ int32 UBeeGenetic::GetSpeedValue()
 	return count;
 }
 
-int32 UBeeGenetic::GetFertiliryValue()
+int32 UBeeGenetic::GetFertiliryValue() const
 {
 	int32 count = 0;
 	int32 maskMain = 1;
@@ -69,7 +69,7 @@ int32 UBeeGenetic::GetFertiliryValue()
 	return count;
 }
 
-int32 UBeeGenetic::GetRadiusValue()
+int32 UBeeGenetic::GetRadiusValue() const
 {
 	int32 count = 0;
 	int32 maskMain = 1;
