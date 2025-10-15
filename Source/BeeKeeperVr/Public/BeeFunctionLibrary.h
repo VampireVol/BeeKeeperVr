@@ -28,4 +28,7 @@ public:
   static void AccumulateCombs(const TMap<ECombType, int>& Honeycombs, UPARAM(ref) TMap<ECombType, FAccumulatorComb>& Accumulator, UDataTable* RecipeTable);
   UFUNCTION(BlueprintCallable, Category = "Util")
   static void ProduceItemsFromCombs(UPARAM(ref) TMap<ECombType, FAccumulatorComb>& Accumulator, UPARAM(ref) TMap<EItemType, int>& OutputItems, UDataTable* RecipeTable);
+
+  UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Object"), Category = "Util")
+  static bool CallFunctionByName(UObject *Object, FName FunctionName);
 };

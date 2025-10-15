@@ -116,3 +116,24 @@ void UBeeFunctionLibrary::ProduceItemsFromCombs(UPARAM(ref) TMap<ECombType, FAcc
 		}
 	}
 }
+
+// Inspiration from: https://forums.unrealengine.com/t/call-function-by-name-here-is-it/1715979
+bool UBeeFunctionLibrary::CallFunctionByName(UObject *Object, FName FunctionName)
+{
+	if (Object)
+	{
+		if (UFunction *Function = Object->FindFunction(FunctionName))
+    {
+      Object->ProcessEvent(Function, nullptr); 
+			return true;
+		}
+		else
+    {
+      UE_LOG(LogTemp, Error, TEXT("Trying to run function named %s but is not found"), *FunctionName.ToString());
+      if (GEngine)
+        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Trying to run function named <%s> but is not found"), *FunctionName.ToString()));
+      return false;
+    }
+	} 
+	return false;
+}
