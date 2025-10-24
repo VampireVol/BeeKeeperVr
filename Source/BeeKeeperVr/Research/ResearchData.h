@@ -24,5 +24,9 @@ struct BEEKEEPERVR_API FResearchData : public FTableRowBase
 	FText Caption;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText Description;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ResearchDependency;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool Endless;
 };
 
