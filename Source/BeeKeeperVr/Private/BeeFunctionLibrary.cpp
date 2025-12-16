@@ -137,3 +137,33 @@ bool UBeeFunctionLibrary::CallFunctionByName(UObject *Object, FName FunctionName
 	} 
 	return false;
 }
+
+FTimerHandle UBeeFunctionLibrary::SetTimerDelegateUnique(FTimerDynamicDelegate Delegate, float Time, bool bLooping, float InitialStartDelay, float InitialStartDelayVariance)
+{
+	FTimerHandle Handle;
+	if (Delegate.IsBound())
+	{
+		const UWorld *const World = GEngine->GetWorldFromContextObject(Delegate.GetUObject(), EGetWorldErrorMode::LogAndReturnNull);
+		if (World)
+		{
+			InitialStartDelay += FMath::RandRange(-InitialStartDelayVariance, InitialStartDelayVariance);
+			if (Time <= 0.f || (Time + InitialStartDelay) < 0.f)
+			{
+				FString ObjectName = GetNameSafe(Delegate.GetUObject());
+				FString FunctionName = Delegate.GetFunctionName().ToString();
+				FFrame::KismetExecutionMessage(*FString::Printf(TEXT("%s %s SetTimer passed a negative or zero time. The associated timer may fail to be created/fire! If using InitialStartDelayVariance, be sure it is smaller than (Time + InitialStartDelay)."), *ObjectName, *FunctionName), ELogVerbosity::Warning);
+			}
+
+			FTimerManager &TimerManager = World->GetTimerManager();
+			TimerManager.SetTimer(Handle, Delegate, Time, bLooping, (Time + InitialStartDelay));
+		}
+	}
+	else
+	{
+		UE_LOG(LogBlueprintUserMessages, Warning,
+			TEXT("SetTimer passed a bad function (%s) or object (%s)"),
+			*Delegate.GetFunctionName().ToString(), *GetNameSafe(Delegate.GetUObject()));
+	}
+
+	return Handle;
+}

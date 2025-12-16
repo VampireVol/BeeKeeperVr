@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Engine/EngineTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/Texture2D.h"
 #include "../BeeGenetic.h"
@@ -31,4 +32,6 @@ public:
 
   UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Object"), Category = "Util")
   static bool CallFunctionByName(UObject *Object, FName FunctionName);
+  UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set Timer by Event Unique", AdvancedDisplay = "InitialStartDelay, InitialStartDelayVariance"), Category = "Util")
+  static FTimerHandle SetTimerDelegateUnique(UPARAM(DisplayName = "Event") FTimerDynamicDelegate Delegate, float Time, bool bLooping, float InitialStartDelay = 0.f, float InitialStartDelayVariance = 0.f);
 };
