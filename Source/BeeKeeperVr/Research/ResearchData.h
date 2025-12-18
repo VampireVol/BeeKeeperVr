@@ -6,7 +6,7 @@
 #include "../Items/ItemData.h"
 #include "../BeeGenetic.h"
 #include "Engine/DataTable.h"
-#include "TaskData.generated.h"
+#include "ResearchData.generated.h"
 
 USTRUCT(BlueprintType)
 struct BEEKEEPERVR_API FResearchData : public FTableRowBase
