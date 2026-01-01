@@ -8,7 +8,8 @@ public class BeeKeeperVrTarget : TargetRules
 	public BeeKeeperVrTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		DefaultBuildSettings = BuildSettingsVersion.V6;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;
 
 		ExtraModuleNames.AddRange( new string[] { "BeeKeeperVr" } );
 	}
