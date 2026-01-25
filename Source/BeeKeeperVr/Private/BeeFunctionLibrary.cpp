@@ -4,6 +4,7 @@
 #include "BeeFunctionLibrary.h"
 #include "../BeeGenetic.h"
 #include "BeeKeeperVr/Items/CombRecipe.h"
+#include "BeeKeeperVr/Items/ItemData.h"
 
 UTexture2D* UBeeFunctionLibrary::GetIcon(UDataTable* IconsTable, const Species Species)
 {
@@ -15,6 +16,19 @@ UTexture2D* UBeeFunctionLibrary::GetIcon(UDataTable* IconsTable, const Species S
 		return ObjectData->Icon;
 	
 	return nullptr;
+}
+
+UTexture2D* UBeeFunctionLibrary::GetItemIcon(UDataTable *IconsTable, const EItemType ItemType, UTexture2D *DefaultIcon)
+{
+	if (!IconsTable)
+		return nullptr;
+
+	const UEnum *EnumPtr = StaticEnum<EItemType>();
+	const FName Name = FName(*EnumPtr->GetNameStringByValue(static_cast<int64>(ItemType)));
+	if (const auto ObjectData = IconsTable->FindRow<FItemTableData>(Name, {}))
+		return ObjectData->Icon;
+
+	return DefaultIcon;
 }
 
 void UBeeFunctionLibrary::SortHoneycombs(UPARAM(ref) TMap<ECombType, int> &Honeycombs)

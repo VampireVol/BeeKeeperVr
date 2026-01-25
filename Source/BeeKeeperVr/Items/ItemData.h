@@ -15,3 +15,13 @@ struct BEEKEEPERVR_API FItemData
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   int Count;
 };
+
+USTRUCT(BlueprintType)
+struct BEEKEEPERVR_API FItemTableData : public FTableRowBase
+{
+  GENERATED_BODY()
+  UPROPERTY(EditAnywhere, BlueprintReadWrite)
+  EItemType Type;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite)
+  UTexture2D *Icon;
+};

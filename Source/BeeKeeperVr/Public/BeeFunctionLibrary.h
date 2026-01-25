@@ -22,6 +22,8 @@ class BEEKEEPERVR_API UBeeFunctionLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintCallable, Category="Bees")
 	static UTexture2D* GetIcon(UDataTable* IconsTable, const Species Species);
+  UFUNCTION(BlueprintCallable, Category = "Data")
+  static UTexture2D* GetItemIcon(UDataTable *IconsTable, const EItemType ItemType, UTexture2D *DefaultIcon);
   UFUNCTION(BlueprintCallable, Category = "Util")
   static void SortHoneycombs(UPARAM(ref) TMap<ECombType, int> &Honeycombs);
 
