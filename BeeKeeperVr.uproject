@@ -51,7 +51,15 @@
 		{
 			"Name": "AnimToTexture",
 			"Enabled": true
+		},
+		{
+			"Name": "McpAutomationBridge",
+			"Enabled": false
 		}
+	],
+	"AdditionalPluginDirectories": [
+		"../McpAutomationBridge-plugin-0.5.18/plugins",
+		"../mcpUnreal/unreal-mcp/MCPGameProject/Plugins"
 	],
 	"TargetPlatforms": [
 		"Android",
