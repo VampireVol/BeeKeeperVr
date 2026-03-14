@@ -36,4 +36,8 @@ public:
   static bool CallFunctionByName(UObject *Object, FName FunctionName);
   UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set Timer by Event Unique", AdvancedDisplay = "InitialStartDelay, InitialStartDelayVariance"), Category = "Util")
   static FTimerHandle SetTimerDelegateUnique(UPARAM(DisplayName = "Event") FTimerDynamicDelegate Delegate, float Time, bool bLooping, float InitialStartDelay = 0.f, float InitialStartDelayVariance = 0.f);
+
+  // Generates a 32x32 texture from comb distribution (sum 1-100 = % fill, rest is transparent)
+  UFUNCTION(BlueprintCallable, Category = "Util")
+  static UTexture2D* GenerateCombTexture(int32 Seed, const TMap<ECombType, int32>& Distribution);
 };
