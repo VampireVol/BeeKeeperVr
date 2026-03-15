@@ -60,11 +60,10 @@ static void mutate(TEnumAsByte<Species> &s, float mutation_chance)
       tier -= 2;
     else if (chance < MUTATION_TIER_DOWN_ONE_CHANCE)
       --tier;
-    else if (chance > MUTATION_TIER_NO_CHANGE_CHANCE &&
-             chance < MUTATION_TIER_UP_ONE_CHANCE)
-      ++tier;
-    else
+    else if (chance >= MUTATION_TIER_UP_ONE_CHANCE)
       tier += 2;
+    else if (chance >= MUTATION_TIER_NO_CHANGE_CHANCE)
+      ++tier;
 
     if (tier < 1)
       tier = 1;
