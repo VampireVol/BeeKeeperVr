@@ -12,8 +12,17 @@
 #include "BeeKeeperVr/Items/AccumulatorCombItem.h"
 #include "BeeFunctionLibrary.generated.h"
 
+USTRUCT(BlueprintType)
+struct FCombDistributionSnapshot
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+	TMap<ECombType, int32> Distribution; // type → percentage (0-100)
+};
+
 /**
- * 
+ *
  */
 UCLASS()
 class BEEKEEPERVR_API UBeeFunctionLibrary : public UBlueprintFunctionLibrary
@@ -37,7 +46,8 @@ public:
   UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set Timer by Event Unique", AdvancedDisplay = "InitialStartDelay, InitialStartDelayVariance"), Category = "Util")
   static FTimerHandle SetTimerDelegateUnique(UPARAM(DisplayName = "Event") FTimerDynamicDelegate Delegate, float Time, bool bLooping, float InitialStartDelay = 0.f, float InitialStartDelayVariance = 0.f);
 
-  // Generates a 32x32 texture from comb distribution (sum 1-100 = % fill, rest is transparent)
+  // Generates a 32x32 texture iteratively; History tracks previous snapshots so already-assigned
+  // pixels are not reshuffled. NewDistribution values must only increase between calls.
   UFUNCTION(BlueprintCallable, Category = "Util")
-  static UTexture2D* GenerateCombTexture(int32 Seed, const TMap<ECombType, int32>& Distribution);
+  static UTexture2D* GenerateCombTexture(int32 Seed, UPARAM(ref) TArray<FCombDistributionSnapshot>& History, const TMap<ECombType, int32>& NewDistribution);
 };

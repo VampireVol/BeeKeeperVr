@@ -208,23 +208,21 @@ static FColor GetCombColor(ECombType Type)
 	}
 }
 
-UTexture2D* UBeeFunctionLibrary::GenerateCombTexture(int32 Seed, const TMap<ECombType, int32>& Distribution)
+// Returns TMap keys sorted by enum value — required for deterministic pixel assignment across calls
+static TArray<ECombType> GetSortedKeys(const TMap<ECombType, int32>& Map)
+{
+	TArray<ECombType> Keys;
+	Map.GetKeys(Keys);
+	Keys.Sort([](ECombType A, ECombType B) { return static_cast<int32>(A) < static_cast<int32>(B); });
+	return Keys;
+}
+
+UTexture2D* UBeeFunctionLibrary::GenerateCombTexture(int32 Seed, TArray<FCombDistributionSnapshot>& History, const TMap<ECombType, int32>& NewDistribution)
 {
 	constexpr int32 WorkPixels  = 32 * 25; // 800 — active surface
 	constexpr int32 TotalPixels = 32 * 32; // 1024 — full texture (power of 2)
 
-	// Step 1: Map % values → pixel counts (800 is divisible by 100, so no rounding error)
-	struct FTypeCount { ECombType Type; int32 Count; };
-	TArray<FTypeCount> Counts;
-
-	for (const auto& [Type, Value] : Distribution)
-	{
-		if (Value <= 0) continue;
-		const int32 Count = FMath::Clamp(Value, 0, 100) * WorkPixels / 100;
-		Counts.Add({ Type, Count });
-	}
-
-	// Step 2: Build and Fisher-Yates shuffle — only working area [0..WorkPixels-1]
+	// Step 1: Build shuffled index list — same Seed always produces the same order
 	TArray<int32> Indices;
 	Indices.Reserve(WorkPixels);
 	for (int32 i = 0; i < WorkPixels; i++)
@@ -237,13 +235,40 @@ UTexture2D* UBeeFunctionLibrary::GenerateCombTexture(int32 Seed, const TMap<ECom
 		Indices.Swap(i, j);
 	}
 
+	// Step 2: Assign pixel types by replaying History deltas, then the new delta.
+	// Indices[Offset] is consumed sequentially — each snapshot only appends new pixels.
+	TArray<ECombType> PixelTypes;
+	PixelTypes.Init(ECombType::None, WorkPixels);
+
+	int32 Offset = 0;
+	const TMap<ECombType, int32>* PrevDistribution = nullptr;
+
+	auto ApplyDelta = [&](const TMap<ECombType, int32>& Current)
+	{
+		for (ECombType Type : GetSortedKeys(Current))
+		{
+			const int32 CurPercent  = Current.FindRef(Type);
+			const int32 PrevPercent = PrevDistribution ? PrevDistribution->FindRef(Type) : 0;
+			const int32 DeltaPixels = (CurPercent - PrevPercent) * WorkPixels / 100;
+			for (int32 i = 0; i < DeltaPixels; i++)
+				PixelTypes[Indices[Offset++]] = Type;
+		}
+		PrevDistribution = &Current;
+	};
+
+	for (const FCombDistributionSnapshot& Snapshot : History)
+		ApplyDelta(Snapshot.Distribution);
+
+	ApplyDelta(NewDistribution);
+	History.Add(FCombDistributionSnapshot{ NewDistribution });
+
 	// Step 3: Create transient texture
 	UTexture2D* Texture = UTexture2D::CreateTransient(32, 32, PF_B8G8R8A8);
 	if (!Texture)
 		return nullptr;
 
 	Texture->MipGenSettings = TMGS_NoMipmaps;
-	Texture->CompressionSettings = TC_EditorIcon; // Uncompressed RGBA
+	Texture->CompressionSettings = TC_EditorIcon;
 	Texture->SRGB = false;
 	Texture->Filter = TF_Nearest;
 
@@ -251,22 +276,16 @@ UTexture2D* UBeeFunctionLibrary::GenerateCombTexture(int32 Seed, const TMap<ECom
 	FTexture2DMipMap& Mip = Texture->GetPlatformData()->Mips[0];
 	uint8* Pixels = static_cast<uint8*>(Mip.BulkData.Lock(LOCK_READ_WRITE));
 
-	// Init all pixels transparent (covers 800..1023 automatically)
-	FMemory::Memzero(Pixels, TotalPixels * 4);
+	FMemory::Memzero(Pixels, TotalPixels * 4); // transparent by default (covers 800..1023)
 
-	// Write colors directly at shuffled positions
-	int32 Offset = 0;
-	for (const auto& [Type, Count] : Counts)
+	for (int32 i = 0; i < WorkPixels; i++)
 	{
-		const FColor Color = GetCombColor(Type);
-		for (int32 i = 0; i < Count; i++)
-		{
-			const int32 Idx = Indices[Offset++];
-			Pixels[Idx * 4 + 0] = Color.B;
-			Pixels[Idx * 4 + 1] = Color.G;
-			Pixels[Idx * 4 + 2] = Color.R;
-			Pixels[Idx * 4 + 3] = Color.A;
-		}
+		if (PixelTypes[i] == ECombType::None) continue;
+		const FColor Color = GetCombColor(PixelTypes[i]);
+		Pixels[i * 4 + 0] = Color.B;
+		Pixels[i * 4 + 1] = Color.G;
+		Pixels[i * 4 + 2] = Color.R;
+		Pixels[i * 4 + 3] = Color.A;
 	}
 
 	Mip.BulkData.Unlock();
