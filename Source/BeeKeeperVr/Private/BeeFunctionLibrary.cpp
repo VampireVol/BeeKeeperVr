@@ -243,24 +243,28 @@ UTexture2D* UBeeFunctionLibrary::GenerateCombTexture(int32 Seed, TArray<FCombDis
 	int32 Offset = 0;
 	const TMap<ECombType, int32>* PrevDistribution = nullptr;
 
-	auto ApplyDelta = [&](const TMap<ECombType, int32>& Current)
+	auto ApplyDelta = [&](const TMap<ECombType, int32>& Current) -> bool
 	{
+		bool isNoChange = true;
 		for (ECombType Type : GetSortedKeys(Current))
 		{
 			const int32 CurPercent  = Current.FindRef(Type);
 			const int32 PrevPercent = PrevDistribution ? PrevDistribution->FindRef(Type) : 0;
 			const int32 DeltaPixels = (CurPercent - PrevPercent) * WorkPixels / 100;
-			for (int32 i = 0; i < DeltaPixels; i++)
-				PixelTypes[Indices[Offset++]] = Type;
-		}
+			if (DeltaPixels > 0)
+				isNoChange = false;
+      for (int32 i = 0; i < DeltaPixels; i++)
+        PixelTypes[Indices[Offset++]] = Type;
+    }
 		PrevDistribution = &Current;
+		return isNoChange;
 	};
 
 	for (const FCombDistributionSnapshot& Snapshot : History)
 		ApplyDelta(Snapshot.Distribution);
 
-	ApplyDelta(NewDistribution);
-	History.Add(FCombDistributionSnapshot{ NewDistribution });
+	if (!ApplyDelta(NewDistribution))
+		History.Add(FCombDistributionSnapshot{ NewDistribution });
 
 	// Step 3: Create transient texture
 	UTexture2D* Texture = UTexture2D::CreateTransient(32, 32, PF_B8G8R8A8);
