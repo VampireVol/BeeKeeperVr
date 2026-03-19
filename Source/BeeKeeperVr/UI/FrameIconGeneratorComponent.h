@@ -40,12 +40,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Icon Generator")
 	int32 RenderTargetSize = 256;
 
-	// Main entry point — call from BP_IconsGenerator::GenerateFrameIcon after Break S_FrameData
+	// Main entry point — uses pool RT, returns it (may be overwritten if pool wraps)
 	UFUNCTION(BlueprintCallable, Category="Icon Generator")
 	UTextureRenderTarget2D* GenerateFrameIcon(
 		int32 Seed,
 		UPARAM(ref) TArray<FCombDistributionSnapshot>& History,
 		const TMap<ECombType, int32>& Honeycombs);
+
+	// Renders into caller-owned RT — safe for persistent slots (no pool aliasing)
+	UFUNCTION(BlueprintCallable, Category="Icon Generator")
+	void GenerateFrameIconToTarget(
+		int32 Seed,
+		UPARAM(ref) TArray<FCombDistributionSnapshot>& History,
+		const TMap<ECombType, int32>& Honeycombs,
+		UTextureRenderTarget2D* TargetRT);
 
 	// Reset pool index — call when opening inventory to avoid slot reuse mid-frame
 	UFUNCTION(BlueprintCallable, Category="Icon Generator")
@@ -65,4 +73,5 @@ private:
 
 	void InitPool();
 	void EnsureFrameDMI();
+	void RenderFrameIcon(int32 Seed, TArray<FCombDistributionSnapshot>& History, const TMap<ECombType, int32>& Honeycombs, UTextureRenderTarget2D* TargetRT);
 };
