@@ -33,6 +33,9 @@ public:
 	static UTexture2D* GetIcon(UDataTable* IconsTable, const Species Species);
   UFUNCTION(BlueprintCallable, Category = "Data")
   static UTexture2D* GetItemIcon(UDataTable *IconsTable, const EItemType ItemType, UTexture2D *DefaultIcon);
+  UFUNCTION(BlueprintCallable, Category = "Data")
+  static UTexture2D *GetFrameIcon(UDataTable *IconsTable, const ECombType Type);
+
   UFUNCTION(BlueprintCallable, Category = "Util")
   static void SortHoneycombs(UPARAM(ref) TMap<ECombType, int> &Honeycombs);
 

@@ -32,6 +32,21 @@ UTexture2D* UBeeFunctionLibrary::GetItemIcon(UDataTable *IconsTable, const EItem
 	return DefaultIcon;
 }
 
+UTexture2D* UBeeFunctionLibrary::GetFrameIcon(UDataTable *IconsTable, const ECombType Type)
+{
+	if (!IconsTable)
+		return nullptr;
+
+	const UEnum *EnumPtr = StaticEnum<ECombType>();
+	FName Name = FName(*EnumPtr->GetNameStringByValue(static_cast<int64>(Type)));
+	if (Name == "NoneRow")
+		Name = "None";
+	if (const auto ObjectData = IconsTable->FindRow<FIconCombTableData>(Name, {}))
+		return ObjectData->Icon;
+
+	return nullptr;
+}
+
 void UBeeFunctionLibrary::SortHoneycombs(UPARAM(ref) TMap<ECombType, int> &Honeycombs)
 {
   Honeycombs.ValueSort([](const int32 Right, const int32 Left) {return Right > Left; });

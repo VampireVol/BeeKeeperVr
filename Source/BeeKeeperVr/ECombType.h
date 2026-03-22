@@ -24,3 +24,13 @@ enum class ECombType : uint8
 	Boxed UMETA(DisplayName = "Boxed"),
 	Ketchup UMETA(DisplayName = "Ketchup")
 };
+
+USTRUCT(BlueprintType)
+struct BEEKEEPERVR_API FIconCombTableData : public FTableRowBase
+{
+	GENERATED_BODY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ECombType Type;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D *Icon;
+};
