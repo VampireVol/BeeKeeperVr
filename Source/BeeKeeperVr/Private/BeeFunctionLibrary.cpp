@@ -285,8 +285,9 @@ UTexture2D* UBeeFunctionLibrary::GenerateCombTexture(int32 Seed, TArray<FCombDis
 	UTexture2D* Texture = UTexture2D::CreateTransient(32, 32, PF_B8G8R8A8);
 	if (!Texture)
 		return nullptr;
-
+#if !PLATFORM_ANDROID
 	Texture->MipGenSettings = TMGS_NoMipmaps;
+#endif
 	Texture->CompressionSettings = TC_EditorIcon;
 	Texture->SRGB = false;
 	Texture->Filter = TF_Nearest;

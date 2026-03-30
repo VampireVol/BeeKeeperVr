@@ -79,3 +79,7 @@ DerivedDataCache/*
 Content/StarterContent/*
 
 .claude/
+Plugins/
+Scripts/
+domains/
+Content/3rdParty/

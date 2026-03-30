@@ -55,6 +55,18 @@
 		{
 			"Name": "McpAutomationBridge",
 			"Enabled": false
+		},
+		{
+			"Name": "UnrealMCP",
+			"Enabled": false
+		},
+		{
+			"Name": "UELLMToolkit",
+			"Enabled": false,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux"
+			]
 		}
 	],
 	"AdditionalPluginDirectories": [
